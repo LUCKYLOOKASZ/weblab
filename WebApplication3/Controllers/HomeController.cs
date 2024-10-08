@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
 using WebApplication3.Models;
 
 namespace WebApplication3.Controllers;
@@ -13,6 +14,10 @@ public class HomeController : Controller
         _logger = logger;
     }
 
+    public IActionResult About()
+    {
+        return View();
+    }
     public IActionResult Index()
     {
         return View();
