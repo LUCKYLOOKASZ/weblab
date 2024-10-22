@@ -1,19 +1,29 @@
-﻿namespace WebApplication3.Models;
-
-public class Birth
+﻿namespace WebApplication3.Models
 {
-    public String? Name { get; set; }
-    public TimeSpan? Data { get; set; }
-    public double? Y { get; set; }
-
-    
-    
-    public int Calculate()
+    public class Birth
     {
-        
-        Data = DateTime.Now - Data;
-        return 0;
-        
-    }
+        public string Name { get; set; }
+        public DateTime? BirthDate { get; set; }
 
+        public bool IsValid()
+        {
+            return !string.IsNullOrEmpty(Name) && BirthDate.HasValue && BirthDate.Value < DateTime.Now;
+        }
+
+        public int CalculateAge()
+        {
+            if (!BirthDate.HasValue)
+            {
+                return 0;
+            }
+
+            var age = DateTime.Now.Year - BirthDate.Value.Year;
+            if (DateTime.Now.DayOfYear < BirthDate.Value.DayOfYear)
+            {
+                age--;
+            }
+
+            return age;
+        }
+    }
 }

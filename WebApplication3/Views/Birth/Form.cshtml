@@ -1,22 +1,18 @@
-﻿@model TModel
-
-@{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
-}
+﻿
+@model WebApplication3.Models.Birth
 
 <div class="container">
     <div class="row justify-content-md-center">
         <div class="col-6">
-            <h2>Form</h2>
+            <h2>Formularz</h2>
             <form action="Result" method="POST">
                 <div class="mb-3">
-                    <label class="form-label" for="x">Podaj imię</label>
-                    <input class="form-control" type="number" name="Name" step="0.00001" id="x"/>
+                    <label class="form-label" for="name">Imię</label>
+                    <input class="form-control" type="text" name="name" id="name" />
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="y">Podaj date urodzin</label>
-                    <input class="form-control" type="number" name="Date" step="0.00001" id="y"/>
+                    <label class="form-label" for="birthDate">Data urodzenia</label>
+                    <input class="form-control" type="date" name="birthDate" id="birthDate" />
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-primary" type="submit">Wyślij</button>
