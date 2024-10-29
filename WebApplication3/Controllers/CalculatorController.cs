@@ -10,6 +10,7 @@ public class CalculatorController : Controller
     public IActionResult Index()
     {
         return View();
+        
     }
     public IActionResult Form()
     {
