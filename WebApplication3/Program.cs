@@ -1,10 +1,14 @@
+using WebApplication3.Models;
+using WebApplication3.Models.services;
 using WebApplication3.Models.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<IContactServices, MemoryContactServices>();
+builder.Services.AddDbContext<AppDbContext>();
+builder.Services.AddTransient<IContactServices, EfContantService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
