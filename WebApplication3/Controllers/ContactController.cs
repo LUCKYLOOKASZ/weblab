@@ -1,85 +1,70 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using WebApplication3.Models;
+﻿using WebApplication3.Models;
+using WebApplication3.Models.Services;
+using Microsoft.AspNetCore.Mvc;
 
-namespace WebApplication3.Controllers;
-
-public class ContactController : Controller
+namespace AspLab5.Controllers
 {
+    public class ContactController : Controller
+    {
+        private  readonly IContactServices _contactService;
 
-    private static Dictionary<int, ContactModel> _contacts = new()
-    {
+        public ContactController(IContactServices contactService)
         {
-            1,
-            new ContactModel()
-            {
-                Id = 1,
-                FirstName = "Krzysztof",
-                LastName = "Ryszard",
-                Email = "krzys@gmail.com",
-                PhoneNumber = "222 333 444",
-                BirthDate = new DateOnly(2003,10,10)
-            }
-        },
-        {
-            2,
-            new ContactModel()
-            {
-                Id = 2,
-                FirstName = "Michal",
-                LastName = "Mati",
-                Email = "matmich@gmail.com",
-                PhoneNumber = "333 333 444",
-                BirthDate = new DateOnly(2003,11,10)
-            }
-        }
-        ,
-        {
-            3,
-            new ContactModel()
-            {
-                Id = 3,
-                FirstName = "Domi",
-                LastName = "Korba",
-                Email = "domkor@gmail.com",
-                PhoneNumber = "444 333 444",
-                BirthDate = new DateOnly(2003,4,15)
-            }
-        }
-    };
-
-    private static int currentId = 3;
-    // Lista kontaktów. przycisk dodawania kontaktu
-    public IActionResult Index()
-    {
-        return View(_contacts);
-    }
-    
-    
-    //formularz dodawania kontaktów
-    public IActionResult Add()
-    {
-        return View();
-    }
-
-    //odbieranie danych z formularza walidacja i dodawanie do kolekcji
-    [HttpPost]
-    public IActionResult Add(ContactModel model)
-    {
-        if (!ModelState.IsValid)
-        {
-            //wyświetlanie ponowne formularza z błędami
-            return View(model);
+            _contactService = contactService;
         }
 
-        model.Id = ++currentId;
-        _contacts.Add(model.Id, model);
-        //dodanie modelu do kolekcji
-        return View("index", _contacts);
-    }
+        // GET: ContactController
+        public ActionResult Index()
+        {
+            return View(_contactService.GetAll());
+        }
 
-    public IActionResult Delete(int id)
-    {
-        _contacts.Remove(id);
-        return View("Index", _contacts); 
+        // GET: ContactController/Details/5
+        public ActionResult Details(int id)
+        {
+            return View(_contactService.GetById(id));
+        }
+
+        // GET: ContactController/Create
+        public ActionResult Add()
+        {
+            return View();
+        }
+
+        // POST: ContactController/Create
+        [HttpPost]
+        public ActionResult Add(ContactModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            _contactService.Add(model);
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: ContactController/Edit/5
+        public IActionResult Edit(int id)
+        {
+            return View(_contactService.GetById(id));
+        }
+
+        // POST: ContactController/Edit/5
+        [HttpPost]
+        public ActionResult Edit(ContactModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            _contactService.Update(model);
+            return RedirectToAction(nameof(System.Index));
+        }
+        
+        public ActionResult Delete(int id, ContactModel model)
+        {
+            _contactService.Delete(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
