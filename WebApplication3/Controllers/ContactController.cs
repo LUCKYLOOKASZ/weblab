@@ -1,6 +1,7 @@
 ﻿using WebApplication3.Models;
 using WebApplication3.Models.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AspLab5.Controllers
 {
@@ -28,7 +29,14 @@ namespace AspLab5.Controllers
         // GET: ContactController/Create
         public ActionResult Add()
         {
-            return View();
+            ContactModel model = new ContactModel();
+            model.Organizations = _contactService.getOrganizations().Select(e => new SelectListItem()
+            {
+                Text = e.Name,
+                Value = e.Id.ToString()
+            }).ToList();
+            
+            return View(model);
         }
 
         // POST: ContactController/Create

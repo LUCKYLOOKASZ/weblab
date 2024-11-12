@@ -32,4 +32,9 @@ public class EfContantService : IContactServices {
     public ContactModel? GetById(int id) {
         throw new NotImplementedException();
     }
+
+    public List<OrganizationEntity> getOrganizations()
+    {
+        return _context.Organizations.ToList();
+    }
 }

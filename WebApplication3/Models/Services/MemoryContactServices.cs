@@ -46,4 +46,9 @@ public class MemoryContactService : IContactServices {
     public ContactModel? GetById(int id) {
         return _contacts.ContainsKey(id) ? _contacts[id] : null;
     }
+
+    public List<OrganizationEntity> getOrganizations()
+    {
+        throw new NotImplementedException();
+    }
 }
