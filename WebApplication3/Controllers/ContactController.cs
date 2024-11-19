@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AspLab5.Controllers
 {
+    [Authorize]
     public class ContactController : Controller
     {
         private  readonly IContactServices _contactService;
