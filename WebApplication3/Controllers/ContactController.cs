@@ -1,4 +1,5 @@
-﻿using WebApplication3.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using WebApplication3.Models;
 using WebApplication3.Models.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -27,6 +28,7 @@ namespace AspLab5.Controllers
         }
 
         // GET: ContactController/Create
+        [Authorize(Roles = "admin")]
         public ActionResult Add()
         {
             ContactModel model = new ContactModel();
@@ -41,6 +43,7 @@ namespace AspLab5.Controllers
 
         // POST: ContactController/Create
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public ActionResult Add(ContactModel model)
         {
             if (!ModelState.IsValid)
