@@ -85,14 +85,16 @@ public class AppDbContext : IdentityDbContext<IdentityUser> {
                 }
             );
         
-        modelBuilder.Entity<ContactEntity>().HasOne<OrganizationEntity>(c => c.Organization).WithMany(or => or.Contact)
-            .HasForeignKey(con => con.OrganizationId);
+        modelBuilder.Entity<ContactEntity>()
+            .HasOne<OrganizationEntity>(c => c.Organization)
+            .WithMany(o => o.Contact)
+            .HasForeignKey(c => c.OrganizationId);
 
         modelBuilder.Entity<OrganizationEntity>().ToTable("organiztions").HasData(
             new OrganizationEntity()
             {
                 Id = 101,
-                Name = "wsei",
+                Name = "wsei",  
                 Nip = "123123123",
                 REGON = "1234123412341234"
             },

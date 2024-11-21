@@ -1,32 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication3.Models;
 
-namespace WebApplication3.Controllers
+namespace WebApplication3.Controllers;
+
+public class Org : Controller
 {
-    public class OrganizationController : Controller
-    {
         private readonly AppDbContext _context;
 
-        public OrganizationController(AppDbContext context)
+        public Org(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Organization
+        // GET: Organizations
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Type.Include(c => c.Organization);
-            return View(await appDbContext.ToListAsync());
-            
+            return View(await _context.Organizations.ToListAsync());
         }
 
-        // GET: Organization/Details/5
+        // GET: Organizations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +27,39 @@ namespace WebApplication3.Controllers
                 return NotFound();
             }
 
-            var contactEntity = await _context.Type
-                .Include(c => c.Organization)
+            var organizationEntity = await _context.Organizations
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (contactEntity == null)
+            if (organizationEntity == null)
             {
                 return NotFound();
             }
 
-            return View(contactEntity);
+            return View(organizationEntity);
         }
 
-        // GET: Organization/Create
+        // GET: Organizations/Create
         public IActionResult Create()
         {
-            ViewData["OrganizationId"] = new SelectList(_context.Organizations, "Id", "Id");
             return View();
         }
 
-        // POST: Organization/Create
+        // POST: Organizations/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Surname,Email,PhoneNumber,BirthDate,Category,Created,OrganizationId")] ContactEntity contactEntity)
+        public async Task<IActionResult> Create([Bind("Id,Name,NIP,REGON")] OrganizationEntity organizationEntity)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(contactEntity);
+                _context.Add(organizationEntity);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrganizationId"] = new SelectList(_context.Organizations, "Id", "Id", contactEntity.OrganizationId);
-            return View(contactEntity);
+            return View(organizationEntity);
         }
 
-        // GET: Organization/Edit/5
+        // GET: Organizations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +67,22 @@ namespace WebApplication3.Controllers
                 return NotFound();
             }
 
-            var contactEntity = await _context.Type.FindAsync(id);
-            if (contactEntity == null)
+            var organizationEntity = await _context.Organizations.FindAsync(id);
+            if (organizationEntity == null)
             {
                 return NotFound();
             }
-            ViewData["OrganizationId"] = new SelectList(_context.Organizations, "Id", "Id", contactEntity.OrganizationId);
-            return View(contactEntity);
+            return View(organizationEntity);
         }
 
-        // POST: Organization/Edit/5
+        // POST: Organizations/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,Email,PhoneNumber,BirthDate,Category,Created,OrganizationId")] ContactEntity contactEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,NIP,REGON")] OrganizationEntity organizationEntity)
         {
-            if (id != contactEntity.Id)
+            if (id != organizationEntity.Id)
             {
                 return NotFound();
             }
@@ -102,12 +91,12 @@ namespace WebApplication3.Controllers
             {
                 try
                 {
-                    _context.Update(contactEntity);
+                    _context.Update(organizationEntity);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ContactEntityExists(contactEntity.Id))
+                    if (!OrganizationEntityExists(organizationEntity.Id))
                     {
                         return NotFound();
                     }
@@ -118,11 +107,10 @@ namespace WebApplication3.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrganizationId"] = new SelectList(_context.Organizations, "Id", "Id", contactEntity.OrganizationId);
-            return View(contactEntity);
+            return View(organizationEntity);
         }
 
-        // GET: Organization/Delete/5
+        // GET: Organizations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,35 +118,33 @@ namespace WebApplication3.Controllers
                 return NotFound();
             }
 
-            var contactEntity = await _context.Type
-                .Include(c => c.Organization)
+            var organizationEntity = await _context.Organizations
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (contactEntity == null)
+            if (organizationEntity == null)
             {
                 return NotFound();
             }
 
-            return View(contactEntity);
+            return View(organizationEntity);
         }
 
-        // POST: Organization/Delete/5
+        // POST: Organizations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var contactEntity = await _context.Type.FindAsync(id);
-            if (contactEntity != null)
+            var organizationEntity = await _context.Organizations.FindAsync(id);
+            if (organizationEntity != null)
             {
-                _context.Type.Remove(contactEntity);
+                _context.Organizations.Remove(organizationEntity);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ContactEntityExists(int id)
+        private bool OrganizationEntityExists(int id)
         {
-            return _context.Type.Any(e => e.Id == id);
+            return _context.Organizations.Any(e => e.Id == id);
         }
     }
-}
