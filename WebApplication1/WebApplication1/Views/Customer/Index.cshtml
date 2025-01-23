@@ -8,7 +8,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create</a>
 </p>
 
 <table class="table">
@@ -36,9 +36,9 @@
                 </td>
                 <td>@customer.Country</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@customer.customer_id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@customer.customer_id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@customer.customer_id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@customer.customer_id" class="btn btn-success">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@customer.customer_id" class="btn btn-info">Details</a>
+                    @* <a asp-action="Delete" asp-route-id="@customer.customer_id">Delete</a> *@
                 </td>
             </tr>
         }
@@ -77,51 +77,48 @@
         <a href="@Url.Action("Index", new { page = ViewBag.TotalPages, size = ViewBag.PageSize })">Last</a>
     }
 </div>
-
 <style>
-    .pagination {
-        display: flex;
-        gap: 5px;
-        margin-top: 20px;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    .pagination a, .pagination span {
-        padding: 5px 10px;
-        text-decoration: none;
-        border: 1px solid #ddd;
-        color: #333;
-        border-radius: 3px;
-    }
-
-    .pagination .current-page {
-        font-weight: bold;
-        background-color: #007bff;
-        color: white;
-        border-color: #007bff;
-    }
-
-    .pagination a:hover {
-        background-color: #f0f0f0;
-    }
-
-    .pagination span {
-        pointer-events: none;
-    }
-
-    table.table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    table.table th, table.table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-
-    table.table th {
-        background-color: #f4f4f4;
-    }
+     .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 5px;
+            font-family: Arial, sans-serif;
+        }
+    
+        .pagination a {
+            text-decoration: none;
+            padding: 8px 12px;
+            color: #007bff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+    
+        .pagination a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+    
+        .pagination .current-page {
+            padding: 8px 12px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    
+        .pagination span {
+            padding: 8px 12px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+    
+        .pagination span.current-page {
+            pointer-events: none;
+        }
 </style>

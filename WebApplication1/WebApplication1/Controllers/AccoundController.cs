@@ -8,10 +8,9 @@ namespace WebApplication1.Controllers;
 
 public class AccountController : Controller
 {
-    // Lista użytkowników w pamięci (na potrzeby nauki)
     private static readonly List<User> Users = new List<User>
     {
-        new User { Username = "admin", Password = "admin" }, // Domyślny admin
+        new User { Username = "admin", Password = "admin" }, // ADMIN
         new User { Username = "basia", Password = "123" },
         new User { Username = "asia", Password = "321" },
         new User { Username = "krzys", Password = "111" },
@@ -126,21 +125,18 @@ public class AccountController : Controller
     [HttpPost]
     public IActionResult Register(string username, string password)
     {
-        // Sprawdzenie, czy użytkownik już istnieje
         if (Users.Any(u => u.Username == username))
         {
             ViewBag.Error = "Username already exists.";
             return View();
         }
-
-        // Dodanie nowego użytkownika do listy
+        
         Users.Add(new User { Username = username, Password = password });
 
         ViewBag.Success = "User registered successfully!";
         return RedirectToAction("Login");
     }
-
-    // Klasa reprezentująca użytkownika
+    
     public class User
     {
         public string Username { get; set; }
