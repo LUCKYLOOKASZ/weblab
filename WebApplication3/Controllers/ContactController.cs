@@ -1,9 +1,12 @@
-﻿using WebApplication3.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using WebApplication3.Models;
 using WebApplication3.Models.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AspLab5.Controllers
 {
+    [Authorize]
     public class ContactController : Controller
     {
         private  readonly IContactServices _contactService;
@@ -26,13 +29,22 @@ namespace AspLab5.Controllers
         }
 
         // GET: ContactController/Create
+        [Authorize(Roles = "admin")]
         public ActionResult Add()
         {
-            return View();
+            ContactModel model = new ContactModel();
+            model.Organizations = _contactService.getOrganizations().Select(e => new SelectListItem()
+            {
+                Text = e.Name,
+                Value = e.Id.ToString()
+            }).ToList();
+            
+            return View(model);
         }
 
         // POST: ContactController/Create
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public ActionResult Add(ContactModel model)
         {
             if (!ModelState.IsValid)
