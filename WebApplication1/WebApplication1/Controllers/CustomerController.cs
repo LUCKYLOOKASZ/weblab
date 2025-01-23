@@ -15,17 +15,6 @@ public class CustomerController : Controller {
         _context = context;
     }
 
-    // GET: Customer
-    // public async Task<IActionResult> Index() {
-    //     var customers = await _context.customers
-    //         .Include(c => c.customer_addresses)
-    //         .ThenInclude(ca => ca.address)
-    //         .ThenInclude(a => a.country)
-    //         .Include(c => c.cust_orders)
-    //         .ToListAsync();
-    //     
-    //     return View(customers);
-    // }
 
     public async Task<IActionResult> Index(int page = 1, int size = 20) {
         var totalRecords = await _context.Customers.CountAsync();
@@ -163,15 +152,38 @@ public class CustomerController : Controller {
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id) {
-        var customer = await _context.Customers.FindAsync(id);
-        if (customer != null) {
-            _context.Customers.Remove(customer);
-        }
+    // public async Task<IActionResult> DeleteConfirmed(int id) {
+    //     var customer = await _context.Customers.FindAsync(id);
+    //     if (customer != null) {
+    //         _context.Customers.Remove(customer);
+    //     }
+    //
+    //     await _context.SaveChangesAsync();
+    //     return RedirectToAction(nameof(Index));
+    // }
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var customer = await _context.Customers
+            .Include(c => c.cust_orders) 
+            .Include(c => c.customer_addresses) 
+            .FirstOrDefaultAsync(c => c.customer_id == id);
 
-        await _context.SaveChangesAsync();
+        if (customer != null)
+        {
+            if (customer.cust_orders.Any())
+            {
+                _context.CustOrders.RemoveRange(customer.cust_orders);
+            }
+            if (customer.customer_addresses.Any())
+            {
+                _context.CustomerAddresses.RemoveRange(customer.customer_addresses);
+            }
+            _context.Customers.Remove(customer);
+            await _context.SaveChangesAsync();
+        }
         return RedirectToAction(nameof(Index));
     }
+
 
     private bool CustomerExists(int id) {
         return _context.Customers.Any(e => e.customer_id == id);
